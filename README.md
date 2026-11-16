@@ -193,6 +193,8 @@ YouTube often blocks datacenter IPs with *"Sign in to confirm you're not a bot"*
 1. Export cookies from a browser that is logged in to a **spare** account, for example with *Get cookies.txt LOCALLY*.
 2. Upload the file and set `YTDLP_COOKIES=/app/cookies.txt`.
 
+**On Google Cloud Run:** store `cookies.txt` in Secret Manager, mount it as a volume at `/secrets` (file name `cookies.txt`) and set `YTDLP_COOKIES=/secrets/cookies.txt`. Read-only mounts are fine, because SurSplit works on a temporary copy.
+
 Keep yt-dlp up to date (`pip install -U yt-dlp`, or rebuild the image) whenever downloads start failing.
 
 ---

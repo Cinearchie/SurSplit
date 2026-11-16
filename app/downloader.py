@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import re
+import shutil
+import tempfile
 from pathlib import Path
 from typing import Callable
 
@@ -51,8 +53,17 @@ def _base_opts(cookies: str) -> dict:
         "retries": 3,
     }
     if cookies and Path(cookies).is_file():
-        opts["cookiefile"] = cookies
+        opts["cookiefile"] = _writable_copy(Path(cookies))
     return opts
+
+
+def _writable_copy(src: Path) -> str:
+    """yt-dlp rewrites its cookie file after every run, but secrets on Cloud Run, Docker and
+    Kubernetes are mounted read-only. Work on a private temporary copy instead."""
+    dest = Path(tempfile.gettempdir()) / "sursplit-cookies.txt"
+    shutil.copyfile(src, dest)
+    dest.chmod(0o600)
+    return str(dest)
 
 
 def fetch_info(url: str, cookies: str = "") -> dict:
