@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+import base64
 import logging
+import secrets
 import shutil
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from . import __version__, audio
@@ -37,6 +39,23 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="SurSplit", version=__version__, lifespan=lifespan)
+
+
+@app.middleware("http")
+async def password_gate(request: Request, call_next):
+    """If APP_PASSWORD is set, require it (HTTP Basic auth; username is ignored)."""
+    if not settings.app_password or request.url.path == "/api/health":
+        return await call_next(request)
+    header = request.headers.get("authorization", "")
+    if header.lower().startswith("basic "):
+        try:
+            _, _, given = base64.b64decode(header[6:]).decode("utf-8").partition(":")
+        except (ValueError, UnicodeDecodeError):
+            given = ""
+        if secrets.compare_digest(given.encode(), settings.app_password.encode()):
+            return await call_next(request)
+    return Response("Password required.", status_code=401,
+                    headers={"WWW-Authenticate": 'Basic realm="SurSplit", charset="UTF-8"'})
 
 
 def client_ip(request: Request) -> str:

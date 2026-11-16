@@ -113,6 +113,7 @@ All settings are optional. Copy `.env.example` to `.env` and edit it, or set the
 |---|---|---|
 | `HOST` / `PORT` | `127.0.0.1` / `8000` | Bind address. Use `0.0.0.0` to accept other devices |
 | `DATA_DIR` / `MODEL_DIR` | `data` / `models` | Temporary job files / downloaded models |
+| `APP_PASSWORD` | *(empty)* | Lock the whole site behind a password (browser login box; any username) |
 | `ENABLE_YOUTUBE` | `true` | Allow YouTube links |
 | `ENABLE_UPLOAD` | `true` | Allow file uploads |
 | `ENABLED_MODELS` | `hq,best` | Models users can choose. Use `hq` on CPU-only hosts |

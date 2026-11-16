@@ -1,4 +1,4 @@
-# SurSplit — production image (works on Hugging Face Spaces, Render, Railway, any VPS)
+# SurSplit — production image (works on Google Cloud Run, Hugging Face Spaces, any VPS)
 FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -19,7 +19,10 @@ RUN useradd -m -u 1000 app
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# Install the CPU-only PyTorch first. Otherwise pip pulls the CUDA build (+3-4 GB of GPU libraries).
+RUN pip install --upgrade pip \
+ && pip install torch --index-url https://download.pytorch.org/whl/cpu \
+ && pip install -r requirements.txt
 
 COPY --chown=app:app . .
 RUN mkdir -p /app/data /app/models && chown -R app:app /app

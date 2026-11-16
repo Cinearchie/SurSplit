@@ -82,6 +82,10 @@ class Settings:
     # Running behind a reverse proxy (Nginx, Render, Hugging Face...)? Then trust X-Forwarded-For.
     trust_proxy: bool = field(default_factory=lambda: _bool("TRUST_PROXY", False))
 
+    # Optional password for the whole site (browser login box; any username works).
+    # Leave empty for no password.
+    app_password: str = field(default_factory=lambda: os.getenv("APP_PASSWORD", ""))
+
     # Optional: path to a Netscape-format cookies.txt for YouTube
     # (needed on many cloud servers where YouTube asks to "confirm you're not a bot").
     ytdlp_cookies: str = field(default_factory=lambda: os.getenv("YTDLP_COOKIES", ""))
