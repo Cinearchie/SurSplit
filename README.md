@@ -116,7 +116,7 @@ All settings are optional. Copy `.env.example` to `.env` and edit it, or set the
 | `APP_PASSWORD` | *(empty)* | Lock the whole site behind a password (browser login box; any username) |
 | `ENABLE_YOUTUBE` | `true` | Allow YouTube links |
 | `ENABLE_UPLOAD` | `true` | Allow file uploads |
-| `YOUTUBE_HELPER_URL` | `https://cobalt.tools/` | When YouTube is off, a **From YouTube** tab copies the link and opens this site so people can get the audio and upload it. Leave empty to hide the tab |
+| `YOUTUBE_HELPER_URL` | `https://audiotranscriber.io/youtube-to-mp3/` | When YouTube is off, a **From YouTube** tab copies the link and opens this site so people can get the audio and upload it. Leave empty to hide the tab |
 | `ENABLED_MODELS` | `hq,best` | Models users can choose. Use `hq` on CPU-only hosts |
 | `DEFAULT_MODEL` | `hq` | Model selected by default |
 | `MAX_DURATION_SECONDS` | `600` | Longest song accepted |

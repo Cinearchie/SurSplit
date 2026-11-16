@@ -85,7 +85,7 @@ class Settings:
     # When YouTube mode is off, the "From YouTube" tab sends people to this site to get
     # the audio themselves (then they upload it). Empty = hide the helper.
     youtube_helper_url: str = field(
-        default_factory=lambda: os.getenv("YOUTUBE_HELPER_URL", "https://cobalt.tools/"))
+        default_factory=lambda: os.getenv("YOUTUBE_HELPER_URL", "https://audiotranscriber.io/youtube-to-mp3/"))
 
     # Optional password for the whole site (browser login box; any username works).
     # Leave empty for no password.
