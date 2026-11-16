@@ -36,6 +36,30 @@
       <div class="tabs" role="tablist">
         <button class="tab active" role="tab" data-tab="youtube" id="tab-youtube" aria-selected="true">YouTube link</button>
         <button class="tab" role="tab" data-tab="upload" id="tab-upload" aria-selected="false">Upload file</button>
+        <button class="tab hidden" role="tab" data-tab="helper" id="tab-helper" aria-selected="false">From YouTube</button>
+      </div>
+
+      <div class="pane hidden helper" data-pane="helper">
+        <ol class="steps">
+          <li>
+            <span>Paste the YouTube link and open the downloader.</span>
+            <div class="helper-row">
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2a2.7 2.7 0 0 0-1.9-1.9C18 4.8 12 4.8 12 4.8s-6 0-7.7.5a2.7 2.7 0 0 0-1.9 1.9C2 8.9 2 12 2 12s0 3.1.4 4.8a2.7 2.7 0 0 0 1.9 1.9c1.7.5 7.7.5 7.7.5s6 0 7.7-.5a2.7 2.7 0 0 0 1.9-1.9c.4-1.7.4-4.8.4-4.8s0-3.1-.4-4.8ZM10 15.1V8.9l5.2 3.1-5.2 3.1Z"/></svg>
+                <label for="helper-url" class="sr-only">YouTube link</label>
+                <input id="helper-url" type="url" inputmode="url" autocomplete="off" placeholder="https://www.youtube.com/watch?v=…" />
+              </div>
+              <button type="button" class="go small" id="helper-open">Copy link &amp; open <span id="helper-site">downloader</span> ↗</button>
+            </div>
+            <small class="helper-msg" id="helper-msg" aria-live="polite"></small>
+          </li>
+          <li><span>On that page, <b>paste</b> the link (<kbd>⌘V</kbd> / <kbd>Ctrl+V</kbd>), choose <b>audio</b>, then <b>download</b>.</span></li>
+          <li>
+            <span>Come back here and upload the file you downloaded.</span>
+            <button type="button" class="link-btn" id="helper-next">I have the file → Upload it</button>
+          </li>
+        </ol>
+        <p class="helper-note">The downloader is a separate, free and open-source site with no ads, run by other people. SurSplit doesn't control it.</p>
       </div>
 
       <form id="job-form" novalidate>

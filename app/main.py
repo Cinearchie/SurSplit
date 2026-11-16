@@ -96,6 +96,7 @@ def public_config() -> dict:
     return {
         "app_name": settings.app_name,
         "youtube": settings.enable_youtube,
+        "youtube_helper_url": settings.youtube_helper_url,
         "upload": settings.enable_upload,
         "max_duration_seconds": settings.max_duration_seconds,
         "max_upload_mb": settings.max_upload_mb,

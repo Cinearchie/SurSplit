@@ -82,6 +82,11 @@ class Settings:
     # Running behind a reverse proxy (Nginx, Render, Hugging Face...)? Then trust X-Forwarded-For.
     trust_proxy: bool = field(default_factory=lambda: _bool("TRUST_PROXY", False))
 
+    # When YouTube mode is off, the "From YouTube" tab sends people to this site to get
+    # the audio themselves (then they upload it). Empty = hide the helper.
+    youtube_helper_url: str = field(
+        default_factory=lambda: os.getenv("YOUTUBE_HELPER_URL", "https://cobalt.tools/"))
+
     # Optional password for the whole site (browser login box; any username works).
     # Leave empty for no password.
     app_password: str = field(default_factory=lambda: os.getenv("APP_PASSWORD", ""))

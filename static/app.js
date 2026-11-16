@@ -52,7 +52,37 @@
       t.setAttribute("aria-selected", String(on));
     });
     document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("hidden", p.dataset.pane !== name));
+    // The helper tab is just instructions, so hide the upload/quality/submit form there.
+    els.form.classList.toggle("hidden", name === "helper");
     formError("");
+  }
+
+  // ---------- "From YouTube" helper (when the server can't download YouTube itself) ----------
+  function setupHelper(siteUrl) {
+    let site = "downloader";
+    try { site = new URL(siteUrl).hostname.replace(/^www\./, ""); } catch { /* keep default */ }
+    $("helper-site").textContent = site;
+    const msg = $("helper-msg");
+
+    $("helper-open").addEventListener("click", async () => {
+      const link = $("helper-url").value.trim();
+      if (link && !/(youtube\.com|youtu\.be)\//i.test(link)) {
+        msg.textContent = "That doesn't look like a YouTube link.";
+        return;
+      }
+      // Start the copy while this tab still has focus, then open the site in the same click
+      // (opening synchronously keeps pop-up blockers happy).
+      const copied = link && navigator.clipboard
+        ? navigator.clipboard.writeText(link).then(() => true, () => false)
+        : Promise.resolve(false);
+      window.open(siteUrl, "_blank", "noopener");
+      if (!link) { msg.textContent = `Opened ${site}. Paste your YouTube link there.`; return; }
+      msg.textContent = (await copied)
+        ? `Link copied. Paste it on ${site}.`
+        : `Opened ${site}. Copy your link and paste it there.`;
+    });
+
+    $("helper-next").addEventListener("click", () => selectTab("upload"));
   }
 
   // ---------- config ----------
@@ -70,9 +100,16 @@
     }
     updateModelNote();
 
+    const helper = !config.youtube && config.upload && config.youtube_helper_url;
     if (!config.youtube) { hide($("tab-youtube")); selectTab("upload"); }
     if (!config.upload) { hide($("tab-upload")); selectTab("youtube"); }
-    if (!config.youtube || !config.upload) document.querySelector(".tabs").classList.add("hidden");
+    if (helper) {
+      show($("tab-helper"));
+      setupHelper(config.youtube_helper_url);
+      els.dropHint.textContent = "MP3, WAV, FLAC, M4A, OGG… or use the From YouTube tab";
+    } else if (!config.youtube || !config.upload) {
+      document.querySelector(".tabs").classList.add("hidden");
+    }
 
     const bits = [];
     if (config.max_duration_seconds) bits.push(`Songs up to ${fmtMin(config.max_duration_seconds)}`);
@@ -221,7 +258,8 @@
     els.url.value = "";
     els.file.value = "";
     els.dropTitle.innerHTML = "Drop a song here or <u>browse</u>";
-    els.dropHint.textContent = "MP3, WAV, FLAC, M4A, OGG…";
+    els.dropHint.textContent = config && !config.youtube && config.youtube_helper_url
+      ? "MP3, WAV, FLAC, M4A, OGG… or use the From YouTube tab" : "MP3, WAV, FLAC, M4A, OGG…";
     document.title = "SurSplit — Free AI Vocal Remover";
     setView("form");
   }
