@@ -22,10 +22,12 @@ COPY requirements.txt .
 # Install the CPU-only PyTorch first. Otherwise pip pulls the CUDA build (+3-4 GB of GPU libraries).
 # A C compiler is needed only to build diffq (it has no prebuilt wheel for Python 3.11+),
 # so it is installed and removed in this same step to keep the image small.
+# torchvision (pulled in by onnx2torch) must come from the same CPU index as torch,
+# otherwise its compiled ops don't match ("operator torchvision::nms does not exist").
 RUN apt-get update \
  && apt-get install -y --no-install-recommends build-essential \
  && pip install --upgrade pip \
- && pip install torch --index-url https://download.pytorch.org/whl/cpu \
+ && pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu \
  && pip install -r requirements.txt \
  && apt-get purge -y --auto-remove build-essential \
  && rm -rf /var/lib/apt/lists/*
