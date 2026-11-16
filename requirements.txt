@@ -1,0 +1,16 @@
+# Web server
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+python-dotenv>=1.0
+
+# YouTube download (keep this updated: pip install -U yt-dlp)
+yt-dlp>=2025.1.1
+
+# AI separation (UVR models). For an NVIDIA GPU, replace [cpu] with [gpu].
+audio-separator[cpu]>=0.30
+audioread>=3.0
+
+# Needed on Python 3.13+ (these modules were removed from the standard library)
+standard-aifc; python_version >= "3.13"
+standard-sunau; python_version >= "3.13"

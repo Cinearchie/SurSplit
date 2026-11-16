@@ -1,0 +1,10 @@
+.venv
+venv
+data
+models
+.env
+cookies.txt
+__pycache__
+*.pyc
+.git
+.vscode
